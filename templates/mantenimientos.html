@@ -1,45 +1,41 @@
-{% extends "layout.html" %}
-
-{% block content %}
-<h2>Mantenimientos</h2>
-
-<h3>Registrar Mantenimiento</h3>
-<form action="/mantenimientos/add" method="POST">
-    <label>Equipo</label>
-    <select name="equipo_id" required>
-        {% for e in equipos %}
-        <option value="{{ e.id }}">{{ e.tipo }} - {{ e.modelo }}</option>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Mantenimientos</title>
+</head>
+<body>
+    <h1>Mantenimientos</h1>
+    <a href="{{ url_for('agregar_mantenimiento') }}">Agregar Mantenimiento</a>
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>Equipo</th>
+            <th>Cliente</th>
+            <th>Tipo</th>
+            <th>Descripción</th>
+            <th>Piezas</th>
+            <th>Fecha Ingreso</th>
+            <th>Fecha Entrega</th>
+            <th>Costo</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+        </tr>
+        {% for m in mantenimientos %}
+        <tr>
+            <td>{{ m.id }}</td>
+            <td>{{ m.equipo_modelo }}</td>
+            <td>{{ m.cliente_nombre or 'Sin cliente' }}</td>
+            <td>{{ m.tipo }}</td>
+            <td>{{ m.descripcion }}</td>
+            <td>{{ m.piezas }}</td>
+            <td>{{ m.fecha_ingreso }}</td>
+            <td>{{ m.fecha_entrega }}</td>
+            <td>{{ m.costo }}</td>
+            <td>{{ m.estado }}</td>
+            <td><a href="{{ url_for('editar_mantenimiento', id=m.id) }}">Editar</a></td>
+        </tr>
         {% endfor %}
-    </select>
-
-    <label>Fecha</label>
-    <input type="date" name="fecha" required>
-
-    <label>Detalle</label>
-    <textarea name="detalle" required></textarea>
-
-    <button type="submit">Guardar</button>
-</form>
-
-<h3>Listado</h3>
-<table>
-    <tr>
-        <th>ID</th>
-        <th>Fecha</th>
-        <th>Detalle</th>
-        <th>Equipo</th>
-        <th>Acciones</th>
-    </tr>
-
-    {% for m in mantenimientos %}
-    <tr>
-        <td>{{ m.id }}</td>
-        <td>{{ m.fecha }}</td>
-        <td>{{ m.detalle }}</td>
-        <td>{{ m.equipo_tipo }} - {{ m.equipo_modelo }}</td>
-        <td><a href="/mantenimientos/editar/{{ m.id }}">Editar</a></td>
-    </tr>
-    {% endfor %}
-</table>
-
-{% endblock %}
+    </table>
+</body>
+</html>

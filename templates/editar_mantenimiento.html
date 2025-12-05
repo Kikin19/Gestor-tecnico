@@ -1,25 +1,55 @@
-{% extends "layout.html" %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>{% if mantenimiento %}Editar Mantenimiento{% else %}Agregar Mantenimiento{% endif %}</title>
+</head>
+<body>
+    <h1>{% if mantenimiento %}Editar Mantenimiento{% else %}Agregar Mantenimiento{% endif %}</h1>
+    <form method="POST"
+        {% if mantenimiento %} action="{{ url_for('editar_mantenimiento', id=mantenimiento.id) }}" 
+        {% else %} action="{{ url_for('agregar_mantenimiento') }}" {% endif %}>
 
-{% block content %}
-<h2>Editar Mantenimiento</h2>
+        <label>Equipo:</label>
+        <select name="equipo_id" required>
+            <option value="">-- Seleccione un equipo --</option>
+            {% for e in equipos %}
+                <option value="{{ e.id }}" {% if mantenimiento and mantenimiento.equipo_id == e.id %}selected{% endif %}>
+                    {{ e.tipo }} - {{ e.modelo }}
+                </option>
+            {% endfor %}
+        </select>
+        <br>
 
-<form method="POST">
-    <label>Equipo</label>
-    <select name="equipo_id" required>
-        {% for e in equipos %}
-        <option value="{{ e.id }}" {% if e.id == mantenimiento['equipo_id'] %}selected{% endif %}>
-            {{ e.tipo }} - {{ e.modelo }}
-        </option>
-        {% endfor %}
-    </select>
+        <label>Tipo:</label>
+        <input type="text" name="tipo" value="{% if mantenimiento %}{{ mantenimiento.tipo }}{% endif %}" required>
+        <br>
 
-    <label>Fecha</label>
-    <input type="date" name="fecha" value="{{ mantenimiento['fecha'] }}" required>
+        <label>Descripción:</label>
+        <input type="text" name="descripcion" value="{% if mantenimiento %}{{ mantenimiento.descripcion }}{% endif %}">
+        <br>
 
-    <label>Detalle</label>
-    <textarea name="detalle" required>{{ mantenimiento['detalle'] }}</textarea>
+        <label>Piezas:</label>
+        <input type="text" name="piezas" value="{% if mantenimiento %}{{ mantenimiento.piezas }}{% endif %}">
+        <br>
 
-    <button type="submit">Actualizar</button>
-</form>
+        <label>Fecha Ingreso:</label>
+        <input type="date" name="fecha_ingreso" value="{% if mantenimiento %}{{ mantenimiento.fecha_ingreso }}{% endif %}">
+        <br>
 
-{% endblock %}
+        <label>Fecha Entrega:</label>
+        <input type="date" name="fecha_entrega" value="{% if mantenimiento %}{{ mantenimiento.fecha_entrega }}{% endif %}">
+        <br>
+
+        <label>Costo:</label>
+        <input type="number" step="0.01" name="costo" value="{% if mantenimiento %}{{ mantenimiento.costo }}{% endif %}">
+        <br>
+
+        <label>Estado:</label>
+        <input type="text" name="estado" value="{% if mantenimiento %}{{ mantenimiento.estado }}{% endif %}">
+        <br>
+
+        <button type="submit">{% if mantenimiento %}Guardar{% else %}Agregar{% endif %}</button>
+    </form>
+</body>
+</html>

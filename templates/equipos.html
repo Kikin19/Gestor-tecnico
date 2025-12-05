@@ -1,45 +1,31 @@
-{% extends "layout.html" %}
-
-{% block content %}
-<h2>Equipos</h2>
-
-<h3>Agregar Equipo</h3>
-<form action="/equipos/add" method="POST">
-    <label>Tipo</label>
-    <input type="text" name="tipo" required>
-
-    <label>Modelo</label>
-    <input type="text" name="modelo" required>
-
-    <label>Cliente</label>
-    <select name="cliente_id" required>
-        {% for c in clientes %}
-        <option value="{{ c.id }}">{{ c.nombre }}</option>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Equipos</title>
+</head>
+<body>
+    <h1>Equipos</h1>
+    <a href="{{ url_for('agregar_equipo') }}">Agregar Equipo</a>
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>Tipo</th>
+            <th>Modelo</th>
+            <th>Cliente</th>
+            <th>Acciones</th>
+        </tr>
+        {% for equipo in equipos %}
+        <tr>
+            <td>{{ equipo.id }}</td>
+            <td>{{ equipo.tipo }}</td>
+            <td>{{ equipo.modelo }}</td>
+            <td>{{ equipo.cliente_nombre or 'Sin cliente' }}</td>
+            <td>
+                <a href="{{ url_for('editar_equipo', id=equipo.id) }}">Editar</a>
+            </td>
+        </tr>
         {% endfor %}
-    </select>
-
-    <button type="submit">Guardar</button>
-</form>
-
-<h3>Listado</h3>
-<table>
-    <tr>
-        <th>ID</th>
-        <th>Tipo</th>
-        <th>Modelo</th>
-        <th>Cliente</th>
-        <th>Acciones</th>
-    </tr>
-
-    {% for e in equipos %}
-    <tr>
-        <td>{{ e.id }}</td>
-        <td>{{ e.tipo }}</td>
-        <td>{{ e.modelo }}</td>
-        <td>{{ e.cliente }}</td>
-        <td><a href="/equipos/editar/{{ e.id }}">Editar</a></td>
-    </tr>
-    {% endfor %}
-</table>
-
-{% endblock %}
+    </table>
+</body>
+</html>
