@@ -1,24 +1,18 @@
-{% extends "layout.html" %}
-
-{% block content %}
-<h2>Editar Equipo</h2>
-
-<form method="POST">
-    <label>Tipo</label>
-    <input type="text" name="tipo" value="{{ equipo['tipo'] }}" required>
-
-    <label>Modelo</label>
-    <input type="text" name="modelo" value="{{ equipo['modelo'] }}" required>
-
-    <label>Cliente</label>
+<form action="{{ url_for('editar_equipo', id=equipo.id) }}" method="POST">
+    <label>Cliente:</label>
     <select name="cliente_id" required>
-        {% for c in clientes %}
-        <option value="{{ c.id }}" {% if c.id == equipo['cliente_id'] %}selected{% endif %}>
-            {{ c.nombre }}
-        </option>
+        {% for cliente in clientes %}
+            <option value="{{ cliente.id }}" {% if equipo.cliente_id == cliente.id %}selected{% endif %}>
+                {{ cliente.nombre }}
+            </option>
         {% endfor %}
     </select>
 
-    <button type="submit">Actualizar</button>
+    <label>Tipo:</label>
+    <input type="text" name="tipo" value="{{ equipo.tipo }}">
+
+    <label>Modelo:</label>
+    <input type="text" name="modelo" value="{{ equipo.modelo }}">
+
+    <button type="submit">Guardar</button>
 </form>
-{% endblock %}

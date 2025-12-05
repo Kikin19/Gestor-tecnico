@@ -65,6 +65,25 @@ def listar_equipos():
     """).fetchall()
     return render_template("equipos.html", equipos=equipos)
 
+# ---------------- AGREGAR EQUIPO ----------------
+@app.route("/equipos/add", methods=["GET", "POST"])
+def agregar_equipo():
+    db = get_db()
+    clientes = db.execute("SELECT * FROM clientes").fetchall()
+
+    if request.method == "POST":
+        tipo = request.form["tipo"]
+        modelo = request.form["modelo"]
+        cliente_id = request.form["cliente_id"]
+
+        db.execute("""
+            INSERT INTO equipos(tipo, modelo, cliente_id) VALUES (?, ?, ?)
+        """, (tipo, modelo, cliente_id))
+        db.commit()
+        return redirect("/equipos")
+
+    return render_template("editar_equipo.html", clientes=clientes, equipo=None)
+
 # ---------------- EDITAR EQUIPO ----------------
 @app.route('/equipos/editar/<int:id>', methods=['GET', 'POST'])
 def editar_equipo(id):
