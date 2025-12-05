@@ -58,7 +58,11 @@ def editar_cliente(id):
 @app.route("/equipos")
 def listar_equipos():
     db = get_db()
-    equipos = db.execute("SELECT * FROM equipos").fetchall()
+    equipos = db.execute("""
+        SELECT equipos.*, clientes.nombre AS cliente_nombre
+        FROM equipos
+        LEFT JOIN clientes ON equipos.cliente_id = clientes.id
+    """).fetchall()
     return render_template("equipos.html", equipos=equipos)
 
 # ---------------- EDITAR EQUIPO ----------------
@@ -86,7 +90,12 @@ def editar_equipo(id):
 @app.route("/mantenimientos")
 def listar_mantenimientos():
     db = get_db()
-    mantenimientos = db.execute("SELECT * FROM mantenimientos").fetchall()
+    mantenimientos = db.execute("""
+        SELECT mantenimientos.*, equipos.modelo AS equipo_modelo, clientes.nombre AS cliente_nombre
+        FROM mantenimientos
+        LEFT JOIN equipos ON mantenimientos.equipo_id = equipos.id
+        LEFT JOIN clientes ON equipos.cliente_id = clientes.id
+    """).fetchall()
     return render_template("mantenimientos.html", mantenimientos=mantenimientos)
 
 # ---------------- EDITAR MANTENIMIENTO ----------------
