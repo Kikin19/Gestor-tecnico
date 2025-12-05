@@ -42,6 +42,10 @@
             <td>{{ c.id }}</td>
             <td>{{ c.nombre }}</td>
             <td>{{ c.telefono }}</td>
+            <td>
+                <a href="/clientes/editar/{{ cliente.id }}" class="btn btn-warning btn-sm scale-hover">Editar</a>
+            </td>
+
         </tr>
         {% endfor %}
     </tbody>

@@ -14,67 +14,73 @@ def index():
     return render_template("index.html")
 
 # ---------------- CLIENTES ----------------
-@app.route("/clientes")
-def clientes():
-    conn = get_db()
-    clientes = conn.execute("SELECT * FROM clientes").fetchall()
-    conn.close()
-    return render_template("clientes.html", clientes=clientes)
+@app.route('/clientes/editar/<int:id>', methods=['GET', 'POST'])
+def editar_cliente(id):
+    cliente = get_db().execute("SELECT * FROM clientes WHERE id = ?", (id,)).fetchone()
 
-@app.route("/clientes/add", methods=["POST"])
-def clientes_add():
-    nombre = request.form["nombre"]
-    telefono = request.form["telefono"]
-    conn = get_db()
-    conn.execute("INSERT INTO clientes(nombre, telefono) VALUES (?,?)", (nombre, telefono))
-    conn.commit()
-    conn.close()
-    return redirect("/clientes")
+    if request.method == 'POST':
+        nombre = request.form['nombre']
+        cedula = request.form['cedula']
+        telefono = request.form['telefono']
+
+        get_db().execute("""
+            UPDATE clientes 
+            SET nombre = ?, cedula = ?, telefono = ?
+            WHERE id = ?
+        """, (nombre, cedula, telefono, id))
+
+        get_db().commit()
+
+        return redirect('/clientes')
+
+    return render_template('editar_cliente.html', cliente=cliente)
+
 
 # ---------------- EQUIPOS ----------------
-@app.route("/equipos")
-def equipos():
-    conn = get_db()
-    equipos = conn.execute("""
-        SELECT e.id, c.nombre AS cliente, e.marca, e.modelo, e.serie
-        FROM equipos e JOIN clientes c ON e.cliente_id = c.id
-    """).fetchall()
-    clientes = conn.execute("SELECT * FROM clientes").fetchall()
-    conn.close()
-    return render_template("equipos.html", equipos=equipos, clientes=clientes)
+@app.route('/equipos/editar/<int:id>', methods=['GET', 'POST'])
+def editar_equipo(id):
+    equipo = get_db().execute("SELECT * FROM equipos WHERE id = ?", (id,)).fetchone()
 
-@app.route("/equipos/add", methods=["POST"])
-def equipos_add():
-    cliente_id = request.form["cliente"]
-    marca = request.form["marca"]
-    modelo = request.form["modelo"]
-    serie = request.form["serie"]
+    if request.method == 'POST':
+        tipo = request.form['tipo']
+        modelo = request.form['modelo']
+        cliente_id = request.form['cliente_id']
 
-    conn = get_db()
-    conn.execute("INSERT INTO equipos(cliente_id, marca, modelo, serie) VALUES (?,?,?,?)",
-                 (cliente_id, marca, modelo, serie))
-    conn.commit()
-    conn.close()
-    return redirect("/equipos")
+        get_db().execute("""
+            UPDATE equipos 
+            SET tipo = ?, modelo = ?, cliente_id = ?
+            WHERE id = ?
+        """, (tipo, modelo, cliente_id, id))
+
+        get_db().commit()
+
+        return redirect('/equipos')
+
+    return render_template('editar_equipo.html', equipo=equipo)
+
 
 # ---------------- MANTENIMIENTOS ----------------
-@app.route("/mantenimientos")
-def mantenimientos():
-    conn = get_db()
-    mant = conn.execute("""
-        SELECT m.id, c.nombre AS cliente, e.marca, m.tipo, m.estado
-        FROM mantenimientos m
-        JOIN equipos e ON m.equipo_id = e.id
-        JOIN clientes c ON e.cliente_id = c.id
-    """).fetchall()
+@app.route('/mantenimientos/editar/<int:id>', methods=['GET', 'POST'])
+def editar_mantenimiento(id):
+    mantenimiento = get_db().execute("SELECT * FROM mantenimientos WHERE id = ?", (id,)).fetchone()
 
-    equipos = conn.execute("""
-        SELECT e.id, c.nombre, e.marca
-        FROM equipos e JOIN clientes c ON e.cliente_id = c.id
-    """).fetchall()
+    if request.method == 'POST':
+        fecha = request.form['fecha']
+        detalle = request.form['detalle']
+        equipo_id = request.form['equipo_id']
 
-    conn.close()
-    return render_template("mantenimientos.html", mant=mant, equipos=equipos)
+        get_db().execute("""
+            UPDATE mantenimientos
+            SET fecha = ?, detalle = ?, equipo_id = ?
+            WHERE id = ?
+        """, (fecha, detalle, equipo_id, id))
+
+        get_db().commit()
+
+        return redirect('/mantenimientos')
+
+    return render_template('editar_mantenimiento.html', mantenimiento=mantenimiento)
+
 
 @app.route("/mantenimientos/add", methods=["POST"])
 def mantenimientos_add():

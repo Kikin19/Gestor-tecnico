@@ -95,6 +95,9 @@
             <td>{{ m.marca }}</td>
             <td>{{ m.tipo }}</td>
             <td>{{ m.estado }}</td>
+            <td>
+                <a href="/mantenimientos/editar/{{ mantenimiento.id }}" class="btn btn-warning btn-sm scale-hover">Editar</a>
+            </td>
         </tr>
         {% endfor %}
     </tbody>

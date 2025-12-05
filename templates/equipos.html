@@ -60,6 +60,9 @@
             <td>{{ e.marca }}</td>
             <td>{{ e.modelo }}</td>
             <td>{{ e.serie }}</td>
+            <td>
+                <a href="/equipos/editar/{{ equipo.id }}" class="btn btn-warning btn-sm scale-hover">Editar</a>
+            </td>
         </tr>
         {% endfor %}
     </tbody>
