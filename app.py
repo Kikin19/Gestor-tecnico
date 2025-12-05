@@ -13,48 +13,40 @@ def get_db():
 def index():
     return render_template("index.html")
 
-# ---------------- LISTAR CLIENTES ----------------
+# ---------------- CLIENTES ----------------
 @app.route("/clientes")
 def listar_clientes():
     db = get_db()
     clientes = db.execute("SELECT * FROM clientes").fetchall()
     return render_template("clientes.html", clientes=clientes)
 
-# ---------------- AGREGAR CLIENTE ----------------
-@app.route('/clientes/add', methods=['POST'])
+@app.route("/clientes/add", methods=["POST"])
 def agregar_cliente():
     nombre = request.form['nombre']
     cedula = request.form.get('cedula', '')
     telefono = request.form['telefono']
 
     db = get_db()
-    db.execute("""
-        INSERT INTO clientes(nombre, cedula, telefono) VALUES (?, ?, ?)
-    """, (nombre, cedula, telefono))
+    db.execute("INSERT INTO clientes(nombre, cedula, telefono) VALUES (?, ?, ?)", (nombre, cedula, telefono))
     db.commit()
-    return redirect('/clientes')
+    return redirect("/clientes")
 
-# ---------------- EDITAR CLIENTE ----------------
-@app.route('/clientes/editar/<int:id>', methods=['GET', 'POST'])
+@app.route("/clientes/editar/<int:id>", methods=["GET", "POST"])
 def editar_cliente(id):
     db = get_db()
-    cliente = db.execute("SELECT * FROM clientes WHERE id = ?", (id,)).fetchone()
+    cliente = db.execute("SELECT * FROM clientes WHERE id=?", (id,)).fetchone()
 
-    if request.method == 'POST':
+    if request.method == "POST":
         nombre = request.form['nombre']
         cedula = request.form.get('cedula', '')
         telefono = request.form['telefono']
-
-        db.execute("""
-            UPDATE clientes SET nombre=?, cedula=?, telefono=? WHERE id=?
-        """, (nombre, cedula, telefono, id))
+        db.execute("UPDATE clientes SET nombre=?, cedula=?, telefono=? WHERE id=?", (nombre, cedula, telefono, id))
         db.commit()
+        return redirect("/clientes")
 
-        return redirect('/clientes')
+    return render_template("editar_cliente.html", cliente=cliente)
 
-    return render_template('editar_cliente.html', cliente=cliente)
-
-# ---------------- LISTAR EQUIPOS ----------------
+# ---------------- EQUIPOS ----------------
 @app.route("/equipos")
 def listar_equipos():
     db = get_db()
@@ -65,7 +57,6 @@ def listar_equipos():
     """).fetchall()
     return render_template("equipos.html", equipos=equipos)
 
-# ---------------- AGREGAR EQUIPO ----------------
 @app.route("/equipos/add", methods=["GET", "POST"])
 def agregar_equipo():
     db = get_db()
@@ -75,37 +66,29 @@ def agregar_equipo():
         tipo = request.form["tipo"]
         modelo = request.form["modelo"]
         cliente_id = request.form["cliente_id"]
-
-        db.execute("""
-            INSERT INTO equipos(tipo, modelo, cliente_id) VALUES (?, ?, ?)
-        """, (tipo, modelo, cliente_id))
+        db.execute("INSERT INTO equipos(tipo, modelo, cliente_id) VALUES (?, ?, ?)", (tipo, modelo, cliente_id))
         db.commit()
         return redirect("/equipos")
 
     return render_template("editar_equipo.html", clientes=clientes, equipo=None)
 
-# ---------------- EDITAR EQUIPO ----------------
-@app.route('/equipos/editar/<int:id>', methods=['GET', 'POST'])
+@app.route("/equipos/editar/<int:id>", methods=["GET", "POST"])
 def editar_equipo(id):
     db = get_db()
-    equipo = db.execute("SELECT * FROM equipos WHERE id = ?", (id,)).fetchone()
+    equipo = db.execute("SELECT * FROM equipos WHERE id=?", (id,)).fetchone()
     clientes = db.execute("SELECT * FROM clientes").fetchall()
 
-    if request.method == 'POST':
-        tipo = request.form['tipo']
-        modelo = request.form['modelo']
-        cliente_id = request.form['cliente_id']
-
-        db.execute("""
-            UPDATE equipos SET tipo=?, modelo=?, cliente_id=? WHERE id=?
-        """, (tipo, modelo, cliente_id, id))
+    if request.method == "POST":
+        tipo = request.form["tipo"]
+        modelo = request.form["modelo"]
+        cliente_id = request.form["cliente_id"]
+        db.execute("UPDATE equipos SET tipo=?, modelo=?, cliente_id=? WHERE id=?", (tipo, modelo, cliente_id, id))
         db.commit()
+        return redirect("/equipos")
 
-        return redirect('/equipos')
+    return render_template("editar_equipo.html", equipo=equipo, clientes=clientes)
 
-    return render_template('editar_equipo.html', equipo=equipo, clientes=clientes)
-
-# ---------------- LISTAR MANTENIMIENTOS ----------------
+# ---------------- MANTENIMIENTOS ----------------
 @app.route("/mantenimientos")
 def listar_mantenimientos():
     db = get_db()
@@ -117,50 +100,46 @@ def listar_mantenimientos():
     """).fetchall()
     return render_template("mantenimientos.html", mantenimientos=mantenimientos)
 
-# ---------------- EDITAR MANTENIMIENTO ----------------
-@app.route('/mantenimientos/editar/<int:id>', methods=['GET', 'POST'])
-def editar_mantenimiento(id):
+@app.route("/mantenimientos/add", methods=["GET", "POST"])
+def agregar_mantenimiento():
     db = get_db()
-    mantenimiento = db.execute("SELECT * FROM mantenimientos WHERE id = ?", (id,)).fetchone()
     equipos = db.execute("SELECT * FROM equipos").fetchall()
 
-    if request.method == 'POST':
-        fecha = request.form['fecha']
-        detalle = request.form['detalle']
-        equipo_id = request.form['equipo_id']
-
+    if request.method == "POST":
+        equipo_id = request.form["equipo_id"]
+        tipo = request.form["tipo"]
+        descripcion = request.form["descripcion"]
+        piezas = request.form["piezas"]
+        fecha_ing = request.form["fecha_ingreso"]
+        fecha_ent = request.form["fecha_entrega"]
+        costo = request.form["costo"]
+        estado = request.form["estado"]
         db.execute("""
-            UPDATE mantenimientos SET fecha=?, detalle=?, equipo_id=? WHERE id=?
-        """, (fecha, detalle, equipo_id, id))
+            INSERT INTO mantenimientos(equipo_id, tipo, descripcion, piezas, fecha_ingreso, fecha_entrega, costo, estado)
+            VALUES (?,?,?,?,?,?,?,?)
+        """, (equipo_id, tipo, descripcion, piezas, fecha_ing, fecha_ent, costo, estado))
         db.commit()
+        return redirect("/mantenimientos")
 
-        return redirect('/mantenimientos')
+    return render_template("editar_mantenimiento.html", equipos=equipos, mantenimiento=None)
 
-    return render_template('editar_mantenimiento.html', mantenimiento=mantenimiento, equipos=equipos)
+@app.route("/mantenimientos/editar/<int:id>", methods=["GET", "POST"])
+def editar_mantenimiento(id):
+    db = get_db()
+    mantenimiento = db.execute("SELECT * FROM mantenimientos WHERE id=?", (id,)).fetchone()
+    equipos = db.execute("SELECT * FROM equipos").fetchall()
 
-# ---------------- AGREGAR MANTENIMIENTO ----------------
-@app.route("/mantenimientos/add", methods=["POST"])
-def mantenimientos_add():
-    equipo_id = request.form["equipo"]
-    tipo = request.form["tipo"]
-    descripcion = request.form["desc"]
-    piezas = request.form["piezas"]
-    fecha_ing = request.form["ingreso"]
-    fecha_ent = request.form["entrega"]
-    costo = request.form["costo"]
-    estado = request.form["estado"]
+    if request.method == "POST":
+        fecha = request.form["fecha"]
+        detalle = request.form["detalle"]
+        equipo_id = request.form["equipo_id"]
+        db.execute("UPDATE mantenimientos SET fecha=?, detalle=?, equipo_id=? WHERE id=?", (fecha, detalle, equipo_id, id))
+        db.commit()
+        return redirect("/mantenimientos")
 
-    conn = get_db()
-    conn.execute("""
-        INSERT INTO mantenimientos(equipo_id, tipo, descripcion, piezas, fecha_ingreso, fecha_entrega, costo, estado)
-        VALUES (?,?,?,?,?,?,?,?)
-    """, (equipo_id, tipo, descripcion, piezas, fecha_ing, fecha_ent, costo, estado))
-    conn.commit()
-    conn.close()
+    return render_template("editar_mantenimiento.html", mantenimiento=mantenimiento, equipos=equipos)
 
-    return redirect("/mantenimientos")
-
-# ---------------- INICIALIZAR BASE DE DATOS ----------------
+# ---------------- INICIALIZAR BD ----------------
 def inicializar_bd():
     conn = sqlite3.connect("database.db")
     cursor = conn.cursor()
@@ -178,10 +157,8 @@ def inicializar_bd():
         CREATE TABLE IF NOT EXISTS equipos (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             cliente_id INTEGER,
-            marca TEXT,
-            modelo TEXT,
-            serie TEXT,
             tipo TEXT,
+            modelo TEXT,
             FOREIGN KEY(cliente_id) REFERENCES clientes(id)
         )
     """)
