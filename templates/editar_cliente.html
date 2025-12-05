@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2 class="mb-4">Editar Cliente</h2>
+
+<form method="POST">
+    <label>Nombre</label>
+    <input type="text" name="nombre" value="{{ cliente['nombre'] }}" required>
+
+    <label>Cédula</label>
+    <input type="text" name="cedula" value="{{ cliente['cedula'] }}" required>
+
+    <label>Teléfono</label>
+    <input type="text" name="telefono" value="{{ cliente['telefono'] }}" required>
+
+    <button type="submit">Guardar cambios</button>
+</form>
+
+
+{% endblock %}

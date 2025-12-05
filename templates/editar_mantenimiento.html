@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2 class="mb-4">Editar Mantenimiento</h2>
+
+<form method="POST" class="fade-in">
+
+    <label>Fecha</label>
+    <input type="date" class="form-control mb-3" name="fecha" value="{{ mantenimiento.fecha }}">
+
+    <label>Detalle</label>
+    <textarea class="form-control mb-3" name="detalle">{{ mantenimiento.detalle }}</textarea>
+
+    <label>Equipo</label>
+    <select name="equipo_id" class="form-control mb-3">
+        {% for e in equipos %}
+            <option value="{{ e.id }}" {% if e.id == mantenimiento.equipo_id %}selected{% endif %}>
+                {{ e.tipo }} - {{ e.modelo }}
+            </option>
+        {% endfor %}
+    </select>
+
+    <button class="btn btn-success">Guardar cambios</button>
+    <a href="/mantenimientos" class="btn btn-secondary">Cancelar</a>
+
+</form>
+
+{% endblock %}

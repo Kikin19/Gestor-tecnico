@@ -16,20 +16,18 @@ def index():
 # ---------------- CLIENTES ----------------
 @app.route('/clientes/editar/<int:id>', methods=['GET', 'POST'])
 def editar_cliente(id):
-    cliente = get_db().execute("SELECT * FROM clientes WHERE id = ?", (id,)).fetchone()
+    db = get_db()
+    cliente = db.execute("SELECT * FROM clientes WHERE id = ?", (id,)).fetchone()
 
     if request.method == 'POST':
         nombre = request.form['nombre']
         cedula = request.form['cedula']
         telefono = request.form['telefono']
 
-        get_db().execute("""
-            UPDATE clientes 
-            SET nombre = ?, cedula = ?, telefono = ?
-            WHERE id = ?
+        db.execute("""
+            UPDATE clientes SET nombre=?, cedula=?, telefono=? WHERE id=?
         """, (nombre, cedula, telefono, id))
-
-        get_db().commit()
+        db.commit()
 
         return redirect('/clientes')
 
@@ -39,48 +37,44 @@ def editar_cliente(id):
 # ---------------- EQUIPOS ----------------
 @app.route('/equipos/editar/<int:id>', methods=['GET', 'POST'])
 def editar_equipo(id):
-    equipo = get_db().execute("SELECT * FROM equipos WHERE id = ?", (id,)).fetchone()
+    db = get_db()
+    equipo = db.execute("SELECT * FROM equipos WHERE id = ?", (id,)).fetchone()
+    clientes = db.execute("SELECT * FROM clientes").fetchall()
 
     if request.method == 'POST':
         tipo = request.form['tipo']
         modelo = request.form['modelo']
         cliente_id = request.form['cliente_id']
 
-        get_db().execute("""
-            UPDATE equipos 
-            SET tipo = ?, modelo = ?, cliente_id = ?
-            WHERE id = ?
+        db.execute("""
+            UPDATE equipos SET tipo=?, modelo=?, cliente_id=? WHERE id=?
         """, (tipo, modelo, cliente_id, id))
-
-        get_db().commit()
+        db.commit()
 
         return redirect('/equipos')
 
-    return render_template('editar_equipo.html', equipo=equipo)
-
+    return render_template('editar_equipo.html', equipo=equipo, clientes=clientes)
 
 # ---------------- MANTENIMIENTOS ----------------
 @app.route('/mantenimientos/editar/<int:id>', methods=['GET', 'POST'])
 def editar_mantenimiento(id):
-    mantenimiento = get_db().execute("SELECT * FROM mantenimientos WHERE id = ?", (id,)).fetchone()
+    db = get_db()
+    mantenimiento = db.execute("SELECT * FROM mantenimientos WHERE id = ?", (id,)).fetchone()
+    equipos = db.execute("SELECT * FROM equipos").fetchall()
 
     if request.method == 'POST':
         fecha = request.form['fecha']
         detalle = request.form['detalle']
         equipo_id = request.form['equipo_id']
 
-        get_db().execute("""
-            UPDATE mantenimientos
-            SET fecha = ?, detalle = ?, equipo_id = ?
-            WHERE id = ?
+        db.execute("""
+            UPDATE mantenimientos SET fecha=?, detalle=?, equipo_id=? WHERE id=?
         """, (fecha, detalle, equipo_id, id))
-
-        get_db().commit()
+        db.commit()
 
         return redirect('/mantenimientos')
 
-    return render_template('editar_mantenimiento.html', mantenimiento=mantenimiento)
-
+    return render_template('editar_mantenimiento.html', mantenimiento=mantenimiento, equipos=equipos)
 
 @app.route("/mantenimientos/add", methods=["POST"])
 def mantenimientos_add():

@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2 class="mb-4">Editar Equipo</h2>
+
+<form method="POST" class="fade-in">
+
+    <label>Tipo</label>
+    <input class="form-control mb-3" name="tipo" value="{{ equipo.tipo }}">
+
+    <label>Modelo</label>
+    <input class="form-control mb-3" name="modelo" value="{{ equipo.modelo }}">
+
+    <label>Cliente propietario</label>
+    <select name="cliente_id" class="form-control mb-3">
+        {% for c in clientes %}
+            <option value="{{ c.id }}" {% if c.id == equipo.cliente_id %}selected{% endif %}>
+                {{ c.nombre }}
+            </option>
+        {% endfor %}
+    </select>
+
+    <button class="btn btn-success">Guardar cambios</button>
+    <a href="/equipos" class="btn btn-secondary">Cancelar</a>
+
+</form>
+
+{% endblock %}
