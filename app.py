@@ -13,7 +13,14 @@ def get_db():
 def index():
     return render_template("index.html")
 
-# ---------------- CLIENTES ----------------
+# ---------------- LISTAR CLIENTES ----------------
+@app.route("/clientes")
+def listar_clientes():
+    db = get_db()
+    clientes = db.execute("SELECT * FROM clientes").fetchall()
+    return render_template("clientes.html", clientes=clientes)
+
+# ---------------- EDITAR CLIENTE ----------------
 @app.route('/clientes/editar/<int:id>', methods=['GET', 'POST'])
 def editar_cliente(id):
     db = get_db()
@@ -21,7 +28,7 @@ def editar_cliente(id):
 
     if request.method == 'POST':
         nombre = request.form['nombre']
-        cedula = request.form['cedula']
+        cedula = request.form.get('cedula', '')
         telefono = request.form['telefono']
 
         db.execute("""
@@ -33,8 +40,14 @@ def editar_cliente(id):
 
     return render_template('editar_cliente.html', cliente=cliente)
 
+# ---------------- LISTAR EQUIPOS ----------------
+@app.route("/equipos")
+def listar_equipos():
+    db = get_db()
+    equipos = db.execute("SELECT * FROM equipos").fetchall()
+    return render_template("equipos.html", equipos=equipos)
 
-# ---------------- EQUIPOS ----------------
+# ---------------- EDITAR EQUIPO ----------------
 @app.route('/equipos/editar/<int:id>', methods=['GET', 'POST'])
 def editar_equipo(id):
     db = get_db()
@@ -55,7 +68,14 @@ def editar_equipo(id):
 
     return render_template('editar_equipo.html', equipo=equipo, clientes=clientes)
 
-# ---------------- MANTENIMIENTOS ----------------
+# ---------------- LISTAR MANTENIMIENTOS ----------------
+@app.route("/mantenimientos")
+def listar_mantenimientos():
+    db = get_db()
+    mantenimientos = db.execute("SELECT * FROM mantenimientos").fetchall()
+    return render_template("mantenimientos.html", mantenimientos=mantenimientos)
+
+# ---------------- EDITAR MANTENIMIENTO ----------------
 @app.route('/mantenimientos/editar/<int:id>', methods=['GET', 'POST'])
 def editar_mantenimiento(id):
     db = get_db()
@@ -76,6 +96,7 @@ def editar_mantenimiento(id):
 
     return render_template('editar_mantenimiento.html', mantenimiento=mantenimiento, equipos=equipos)
 
+# ---------------- AGREGAR MANTENIMIENTO ----------------
 @app.route("/mantenimientos/add", methods=["POST"])
 def mantenimientos_add():
     equipo_id = request.form["equipo"]
@@ -96,7 +117,8 @@ def mantenimientos_add():
     conn.close()
 
     return redirect("/mantenimientos")
-#base
+
+# ---------------- INICIALIZAR BASE DE DATOS ----------------
 def inicializar_bd():
     conn = sqlite3.connect("database.db")
     cursor = conn.cursor()
@@ -105,7 +127,8 @@ def inicializar_bd():
         CREATE TABLE IF NOT EXISTS clientes (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             nombre TEXT,
-            telefono TEXT
+            telefono TEXT,
+            cedula TEXT
         )
     """)
 
@@ -116,6 +139,7 @@ def inicializar_bd():
             marca TEXT,
             modelo TEXT,
             serie TEXT,
+            tipo TEXT,
             FOREIGN KEY(cliente_id) REFERENCES clientes(id)
         )
     """)
@@ -138,9 +162,7 @@ def inicializar_bd():
     conn.commit()
     conn.close()
 
-
 # ---------------- RUN ----------------
 if __name__ == "__main__":
     inicializar_bd()
     app.run(debug=True)
-

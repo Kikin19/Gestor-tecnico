@@ -1,28 +1,24 @@
-{% extends "base.html" %}
+{% extends "layout.html" %}
+
 {% block content %}
+<h2>Editar Equipo</h2>
 
-<h2 class="mb-4">Editar Equipo</h2>
-
-<form method="POST" class="fade-in">
-
+<form method="POST">
     <label>Tipo</label>
-    <input class="form-control mb-3" name="tipo" value="{{ equipo.tipo }}">
+    <input type="text" name="tipo" value="{{ equipo['tipo'] }}" required>
 
     <label>Modelo</label>
-    <input class="form-control mb-3" name="modelo" value="{{ equipo.modelo }}">
+    <input type="text" name="modelo" value="{{ equipo['modelo'] }}" required>
 
-    <label>Cliente propietario</label>
-    <select name="cliente_id" class="form-control mb-3">
+    <label>Cliente</label>
+    <select name="cliente_id" required>
         {% for c in clientes %}
-            <option value="{{ c.id }}" {% if c.id == equipo.cliente_id %}selected{% endif %}>
-                {{ c.nombre }}
-            </option>
+        <option value="{{ c.id }}" {% if c.id == equipo['cliente_id'] %}selected{% endif %}>
+            {{ c.nombre }}
+        </option>
         {% endfor %}
     </select>
 
-    <button class="btn btn-success">Guardar cambios</button>
-    <a href="/equipos" class="btn btn-secondary">Cancelar</a>
-
+    <button type="submit">Actualizar</button>
 </form>
-
 {% endblock %}
