@@ -4,7 +4,8 @@
 
 {% block content %}
 <h1>Equipos</h1>
-<a href="{{ url_for('agregar_equipo') }}">Agregar Equipo</a>
+<a href="{{ url_for('agregar_equipo') }}" class="button-link">Agregar Equipo</a>
+
 <table>
     <tr>
         <th>ID</th>
@@ -20,7 +21,7 @@
         <td>{{ equipo.modelo }}</td>
         <td>{{ equipo.cliente_nombre or 'Sin cliente' }}</td>
         <td>
-            <a href="{{ url_for('editar_equipo', id=equipo.id) }}">Editar</a>
+            <a href="{{ url_for('editar_equipo', id=equipo.id) }}" class="button-link">Editar</a>
         </td>
     </tr>
     {% endfor %}

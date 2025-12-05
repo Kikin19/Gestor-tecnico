@@ -4,7 +4,8 @@
 
 {% block content %}
 <h1>Mantenimientos</h1>
-<a href="{{ url_for('agregar_mantenimiento') }}">Agregar Mantenimiento</a>
+<a href="{{ url_for('agregar_mantenimiento') }}" class="button-link">Agregar Mantenimiento</a>
+
 <table>
     <tr>
         <th>ID</th>
@@ -31,7 +32,9 @@
         <td>{{ m.fecha_entrega }}</td>
         <td>{{ m.costo }}</td>
         <td>{{ m.estado }}</td>
-        <td><a href="{{ url_for('editar_mantenimiento', id=m.id) }}">Editar</a></td>
+        <td>
+            <a href="{{ url_for('editar_mantenimiento', id=m.id) }}" class="button-link">Editar</a>
+        </td>
     </tr>
     {% endfor %}
 </table>
