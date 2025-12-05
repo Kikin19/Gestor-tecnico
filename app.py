@@ -20,6 +20,20 @@ def listar_clientes():
     clientes = db.execute("SELECT * FROM clientes").fetchall()
     return render_template("clientes.html", clientes=clientes)
 
+# ---------------- AGREGAR CLIENTE ----------------
+@app.route('/clientes/add', methods=['POST'])
+def agregar_cliente():
+    nombre = request.form['nombre']
+    cedula = request.form.get('cedula', '')
+    telefono = request.form['telefono']
+
+    db = get_db()
+    db.execute("""
+        INSERT INTO clientes(nombre, cedula, telefono) VALUES (?, ?, ?)
+    """, (nombre, cedula, telefono))
+    db.commit()
+    return redirect('/clientes')
+
 # ---------------- EDITAR CLIENTE ----------------
 @app.route('/clientes/editar/<int:id>', methods=['GET', 'POST'])
 def editar_cliente(id):
