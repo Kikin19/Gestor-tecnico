@@ -1,31 +1,28 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Equipos</title>
-</head>
-<body>
-    <h1>Equipos</h1>
-    <a href="{{ url_for('agregar_equipo') }}">Agregar Equipo</a>
-    <table border="1">
-        <tr>
-            <th>ID</th>
-            <th>Tipo</th>
-            <th>Modelo</th>
-            <th>Cliente</th>
-            <th>Acciones</th>
-        </tr>
-        {% for equipo in equipos %}
-        <tr>
-            <td>{{ equipo.id }}</td>
-            <td>{{ equipo.tipo }}</td>
-            <td>{{ equipo.modelo }}</td>
-            <td>{{ equipo.cliente_nombre or 'Sin cliente' }}</td>
-            <td>
-                <a href="{{ url_for('editar_equipo', id=equipo.id) }}">Editar</a>
-            </td>
-        </tr>
-        {% endfor %}
-    </table>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}Equipos{% endblock %}
+
+{% block content %}
+<h1>Equipos</h1>
+<a href="{{ url_for('agregar_equipo') }}">Agregar Equipo</a>
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Tipo</th>
+        <th>Modelo</th>
+        <th>Cliente</th>
+        <th>Acciones</th>
+    </tr>
+    {% for equipo in equipos %}
+    <tr>
+        <td>{{ equipo.id }}</td>
+        <td>{{ equipo.tipo }}</td>
+        <td>{{ equipo.modelo }}</td>
+        <td>{{ equipo.cliente_nombre or 'Sin cliente' }}</td>
+        <td>
+            <a href="{{ url_for('editar_equipo', id=equipo.id) }}">Editar</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

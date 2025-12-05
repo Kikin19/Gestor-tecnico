@@ -1,23 +1,19 @@
-{% extends "layout.html" %}
+{% extends "base.html" %}
+
+{% block title %}Clientes{% endblock %}
 
 {% block content %}
-<h2>Clientes</h2>
+<h1>Clientes</h1>
 
-<h3>Agregar Cliente</h3>
-<form action="/clientes/add" method="POST">
-    <label>Nombre</label>
-    <input type="text" name="nombre" required>
-
-    <label>Cédula</label>
-    <input type="text" name="cedula" required>
-
-    <label>Teléfono</label>
-    <input type="text" name="telefono" required>
-
-    <button type="submit">Guardar</button>
+<h2>Agregar Cliente</h2>
+<form action="{{ url_for('agregar_cliente') }}" method="POST">
+    <input type="text" name="nombre" placeholder="Nombre" required>
+    <input type="text" name="cedula" placeholder="Cédula">
+    <input type="text" name="telefono" placeholder="Teléfono" required>
+    <button type="submit">Agregar Cliente</button>
 </form>
 
-<h3>Listado</h3>
+<h2>Listado de Clientes</h2>
 <table>
     <tr>
         <th>ID</th>
@@ -26,18 +22,16 @@
         <th>Teléfono</th>
         <th>Acciones</th>
     </tr>
-
-    {% for c in clientes %}
+    {% for cliente in clientes %}
     <tr>
-        <td>{{ c.id }}</td>
-        <td>{{ c.nombre }}</td>
-        <td>{{ c.cedula }}</td>
-        <td>{{ c.telefono }}</td>
+        <td>{{ cliente.id }}</td>
+        <td>{{ cliente.nombre }}</td>
+        <td>{{ cliente.cedula }}</td>
+        <td>{{ cliente.telefono }}</td>
         <td>
-            <a href="/clientes/editar/{{ c.id }}">Editar</a>
+            <a href="{{ url_for('editar_cliente', id=cliente.id) }}">Editar</a>
         </td>
     </tr>
     {% endfor %}
 </table>
-
 {% endblock %}

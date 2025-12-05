@@ -1,41 +1,38 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Mantenimientos</title>
-</head>
-<body>
-    <h1>Mantenimientos</h1>
-    <a href="{{ url_for('agregar_mantenimiento') }}">Agregar Mantenimiento</a>
-    <table border="1">
-        <tr>
-            <th>ID</th>
-            <th>Equipo</th>
-            <th>Cliente</th>
-            <th>Tipo</th>
-            <th>Descripción</th>
-            <th>Piezas</th>
-            <th>Fecha Ingreso</th>
-            <th>Fecha Entrega</th>
-            <th>Costo</th>
-            <th>Estado</th>
-            <th>Acciones</th>
-        </tr>
-        {% for m in mantenimientos %}
-        <tr>
-            <td>{{ m.id }}</td>
-            <td>{{ m.equipo_modelo }}</td>
-            <td>{{ m.cliente_nombre or 'Sin cliente' }}</td>
-            <td>{{ m.tipo }}</td>
-            <td>{{ m.descripcion }}</td>
-            <td>{{ m.piezas }}</td>
-            <td>{{ m.fecha_ingreso }}</td>
-            <td>{{ m.fecha_entrega }}</td>
-            <td>{{ m.costo }}</td>
-            <td>{{ m.estado }}</td>
-            <td><a href="{{ url_for('editar_mantenimiento', id=m.id) }}">Editar</a></td>
-        </tr>
-        {% endfor %}
-    </table>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}Mantenimientos{% endblock %}
+
+{% block content %}
+<h1>Mantenimientos</h1>
+<a href="{{ url_for('agregar_mantenimiento') }}">Agregar Mantenimiento</a>
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Equipo</th>
+        <th>Cliente</th>
+        <th>Tipo</th>
+        <th>Descripción</th>
+        <th>Piezas</th>
+        <th>Fecha Ingreso</th>
+        <th>Fecha Entrega</th>
+        <th>Costo</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+    </tr>
+    {% for m in mantenimientos %}
+    <tr>
+        <td>{{ m.id }}</td>
+        <td>{{ m.equipo_modelo }}</td>
+        <td>{{ m.cliente_nombre or 'Sin cliente' }}</td>
+        <td>{{ m.tipo }}</td>
+        <td>{{ m.descripcion }}</td>
+        <td>{{ m.piezas }}</td>
+        <td>{{ m.fecha_ingreso }}</td>
+        <td>{{ m.fecha_entrega }}</td>
+        <td>{{ m.costo }}</td>
+        <td>{{ m.estado }}</td>
+        <td><a href="{{ url_for('editar_mantenimiento', id=m.id) }}">Editar</a></td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}
