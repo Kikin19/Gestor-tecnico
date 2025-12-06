@@ -1,29 +1,24 @@
 {% extends "base.html" %}
-
-{% block title %}{% if equipo %}Editar Equipo{% else %}Agregar Equipo{% endif %}{% endblock %}
+{% block title %}Editar Equipo{% endblock %}
 
 {% block content %}
-<h1>{% if equipo %}Editar Equipo{% else %}Agregar Equipo{% endif %}</h1>
-<form method="POST" 
-    {% if equipo %} action="{{ url_for('editar_equipo', id=equipo.id) }}" 
-    {% else %} action="{{ url_for('agregar_equipo') }}" {% endif %}>
+<h1>Editar Equipo</h1>
 
-    <label>Cliente:</label>
+<form method="POST">
+    <input type="text" name="tipo" value="{{ equipo.tipo }}" placeholder="Tipo">
+    <input type="text" name="modelo" value="{{ equipo.modelo }}" placeholder="Modelo">
+
     <select name="cliente_id" required>
-        <option value="">-- Seleccione un cliente --</option>
+        <option value="">Seleccione cliente</option>
         {% for cliente in clientes %}
-            <option value="{{ cliente.id }}" {% if equipo and equipo.cliente_id == cliente.id %}selected{% endif %}>
-                {{ cliente.nombre }}
-            </option>
+        <option value="{{ cliente.id }}" {% if equipo.cliente_id == cliente.id %}selected{% endif %}>
+            {{ cliente.nombre }}
+        </option>
         {% endfor %}
     </select>
 
-    <label>Tipo:</label>
-    <input type="text" name="tipo" value="{% if equipo %}{{ equipo.tipo }}{% endif %}" required>
-
-    <label>Modelo:</label>
-    <input type="text" name="modelo" value="{% if equipo %}{{ equipo.modelo }}{% endif %}" required>
-
-    <button type="submit">{% if equipo %}Guardar{% else %}Agregar{% endif %}</button>
+    <button type="submit">Guardar</button>
 </form>
+
 {% endblock %}
+

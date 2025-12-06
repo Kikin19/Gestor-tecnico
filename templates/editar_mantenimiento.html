@@ -4,6 +4,7 @@
 
 {% block content %}
 <h1>{% if mantenimiento %}Editar Mantenimiento{% else %}Agregar Mantenimiento{% endif %}</h1>
+
 <form method="POST"
     {% if mantenimiento %} action="{{ url_for('editar_mantenimiento', id=mantenimiento.id) }}" 
     {% else %} action="{{ url_for('agregar_mantenimiento') }}" {% endif %}>
@@ -39,6 +40,8 @@
     <label>Estado:</label>
     <input type="text" name="estado" value="{% if mantenimiento %}{{ mantenimiento.estado }}{% endif %}">
 
-    <button type="submit">{% if mantenimiento %}Guardar{% else %}Agregar{% endif %}</button>
+    <button type="submit">
+        {% if mantenimiento %}Guardar{% else %}Agregar{% endif %}
+    </button>
 </form>
 {% endblock %}

@@ -1,41 +1,37 @@
 {% extends "base.html" %}
-
 {% block title %}Mantenimientos{% endblock %}
 
 {% block content %}
 <h1>Mantenimientos</h1>
-<a href="{{ url_for('agregar_mantenimiento') }}" class="button-link">Agregar Mantenimiento</a>
 
+<div style="text-align:center;">
+    <a class="button-link" href="{{ url_for('agregar_mantenimiento') }}">+ Registrar Mantenimiento</a>
+</div>
+
+<div class="table-container">
 <table>
     <tr>
         <th>ID</th>
         <th>Equipo</th>
         <th>Cliente</th>
-        <th>Tipo</th>
+        <th>Fecha</th>
         <th>Descripción</th>
-        <th>Piezas</th>
-        <th>Fecha Ingreso</th>
-        <th>Fecha Entrega</th>
-        <th>Costo</th>
-        <th>Estado</th>
         <th>Acciones</th>
     </tr>
+
     {% for m in mantenimientos %}
     <tr>
         <td>{{ m.id }}</td>
-        <td>{{ m.equipo_modelo }}</td>
-        <td>{{ m.cliente_nombre or 'Sin cliente' }}</td>
-        <td>{{ m.tipo }}</td>
+        <td>{{ m.equipo_tipo }} - {{ m.equipo_modelo }}</td>
+        <td>{{ m.cliente_nombre }}</td>
+        <td>{{ m.fecha }}</td>
         <td>{{ m.descripcion }}</td>
-        <td>{{ m.piezas }}</td>
-        <td>{{ m.fecha_ingreso }}</td>
-        <td>{{ m.fecha_entrega }}</td>
-        <td>{{ m.costo }}</td>
-        <td>{{ m.estado }}</td>
         <td>
-            <a href="{{ url_for('editar_mantenimiento', id=m.id) }}" class="button-link">Editar</a>
+            <a class="button-link" href="{{ url_for('editar_mantenimiento', id=m.id) }}">Editar</a>
         </td>
     </tr>
     {% endfor %}
 </table>
+</div>
+
 {% endblock %}

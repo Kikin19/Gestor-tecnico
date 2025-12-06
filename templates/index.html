@@ -1,12 +1,27 @@
 {% extends "base.html" %}
+{% block title %}Inicio{% endblock %}
 
 {% block content %}
-<div class="text-center mt-5">
-    <h1 class="mb-4">Sistema de Gestión de Mantenimientos</h1>
-    <p class="lead">Controla clientes, equipos y mantenimientos en un solo lugar.</p>
 
-    <a href="/clientes" class="btn btn-primary btn-lg mx-2">Clientes</a>
-    <a href="/equipos" class="btn btn-secondary btn-lg mx-2">Equipos</a>
-    <a href="/mantenimientos" class="btn btn-success btn-lg mx-2">Mantenimientos</a>
+<h1 style="
+    font-size: 42px;
+    font-weight: 900;
+    color: #003d9b;
+    margin-bottom: 5px;
+">Bienvenido a Mi Plataforma</h1>
+
+<p style="text-align:center; font-size:18px; color:#333;">
+    Gestiona tus clientes, equipos y mantenimientos en un solo lugar
+</p>
+
+<div style="text-align:center; margin-top: 40px;">
+    <a class="button-link" href="{{ url_for('listar_clientes') }}">EMPEZAR AHORA →</a>
 </div>
+
+<br><br>
+
+<img src="https://i.imgur.com/Yq3ebC1.png"
+     style="width: 100%; border-radius: 12px; box-shadow: 0 8px 25px rgba(0,0,0,0.4);">
+
 {% endblock %}
+

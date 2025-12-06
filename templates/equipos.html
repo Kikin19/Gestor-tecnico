@@ -1,11 +1,14 @@
 {% extends "base.html" %}
-
 {% block title %}Equipos{% endblock %}
 
 {% block content %}
 <h1>Equipos</h1>
-<a href="{{ url_for('agregar_equipo') }}" class="button-link">Agregar Equipo</a>
 
+<div style="text-align:center;">
+    <a class="button-link" href="{{ url_for('agregar_equipo') }}">+ Agregar Equipo</a>
+</div>
+
+<div class="table-container">
 <table>
     <tr>
         <th>ID</th>
@@ -14,16 +17,20 @@
         <th>Cliente</th>
         <th>Acciones</th>
     </tr>
-    {% for equipo in equipos %}
+
+    {% for e in equipos %}
     <tr>
-        <td>{{ equipo.id }}</td>
-        <td>{{ equipo.tipo }}</td>
-        <td>{{ equipo.modelo }}</td>
-        <td>{{ equipo.cliente_nombre or 'Sin cliente' }}</td>
+        <td>{{ e.id }}</td>
+        <td>{{ e.tipo }}</td>
+        <td>{{ e.modelo }}</td>
+        <td>{{ e.cliente_nombre }}</td>
         <td>
-            <a href="{{ url_for('editar_equipo', id=equipo.id) }}" class="button-link">Editar</a>
+            <a class="button-link" href="{{ url_for('editar_equipo', id=e.id) }}">Editar</a>
         </td>
     </tr>
     {% endfor %}
 </table>
+</div>
+
 {% endblock %}
+

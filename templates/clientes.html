@@ -1,37 +1,33 @@
 {% extends "base.html" %}
-
 {% block title %}Clientes{% endblock %}
 
 {% block content %}
 <h1>Clientes</h1>
 
-<h2>Agregar Cliente</h2>
-<form action="{{ url_for('agregar_cliente') }}" method="POST">
-    <input type="text" name="nombre" placeholder="Nombre" required>
-    <input type="text" name="cedula" placeholder="Cédula">
-    <input type="text" name="telefono" placeholder="Teléfono" required>
-    <button type="submit">Agregar Cliente</button>
-</form>
+<div style="text-align:center;">
+    <a class="button-link" href="{{ url_for('agregar_cliente') }}">+ Agregar Cliente</a>
+</div>
 
-<h2>Listado de Clientes</h2>
+<div class="table-container">
 <table>
     <tr>
         <th>ID</th>
         <th>Nombre</th>
-        <th>Cédula</th>
         <th>Teléfono</th>
         <th>Acciones</th>
     </tr>
-    {% for cliente in clientes %}
+
+    {% for c in clientes %}
     <tr>
-        <td>{{ cliente.id }}</td>
-        <td>{{ cliente.nombre }}</td>
-        <td>{{ cliente.cedula }}</td>
-        <td>{{ cliente.telefono }}</td>
+        <td>{{ c.id }}</td>
+        <td>{{ c.nombre }}</td>
+        <td>{{ c.telefono }}</td>
         <td>
-            <a href="{{ url_for('editar_cliente', id=cliente.id) }}" class="button-link">Editar</a>
+            <a class="button-link" href="{{ url_for('editar_cliente', id=c.id) }}">Editar</a>
         </td>
     </tr>
     {% endfor %}
 </table>
+</div>
+
 {% endblock %}
