@@ -1,36 +1,36 @@
-{% load static %}
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}Mi sitio{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}TecnoFix{% endblock %}</title>
 
-    <!-- Enlace al CSS -->
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
+
 <body>
 
-    <!-- NAVBAR GLOBAL -->
-    <header>
-        <div class="nav-container">
-            <div class="logo">
-                <img src="{% static 'img/logo.png' %}" alt="Logo">
-                <h2>Mi Sitio</h2>
-            </div>
-
-            <nav>
-                <a href="/">Inicio</a>
-                <a href="/clientes/">Clientes</a>
-                <a href="/reportes/">Reportes</a>
-            </nav>
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="logo">
+            <img src="{{ url_for('static', filename='img/TecnoFix.png') }}" alt="Logo">
+            <h2>TecnoFix</h2>
         </div>
-    </header>
 
-    <!-- CONTENIDO CAMBIANTE -->
-    <main>
+        <ul class="menu">
+            <li><a href="{{ url_for('index') }}">Inicio</a></li>
+            <li><a href="{{ url_for('clientes') }}">Clientes</a></li>
+            <li><a href="{{ url_for('equipos') }}">Equipos</a></li>
+            <li><a href="{{ url_for('mantenimientos') }}">Mantenimientos</a></li>
+        </ul>
+    </nav>
+
+    <!-- CONTENIDO -->
+    <div class="contenido">
         {% block content %}
         {% endblock %}
-    </main>
+    </div>
 
 </body>
 </html>
