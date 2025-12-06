@@ -5,13 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}TecnoFix{% endblock %}</title>
 
-    <!-- CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 
 <body>
 
-    <!-- NAVBAR -->
     <nav class="navbar">
         <div class="logo">
             <img src="{{ url_for('static', filename='img/TecnoFix.png') }}" alt="Logo">
@@ -20,16 +18,14 @@
 
         <ul class="menu">
             <li><a href="{{ url_for('index') }}">Inicio</a></li>
-            <li><a href="{{ url_for('clientes') }}">Clientes</a></li>
-            <li><a href="{{ url_for('equipos') }}">Equipos</a></li>
-            <li><a href="{{ url_for('mantenimientos') }}">Mantenimientos</a></li>
+            <li><a href="{{ url_for('listar_clientes') }}">Clientes</a></li>
+            <li><a href="{{ url_for('listar_equipos') }}">Equipos</a></li>
+            <li><a href="{{ url_for('listar_mantenimientos') }}">Mantenimientos</a></li>
         </ul>
     </nav>
 
-    <!-- CONTENIDO -->
     <div class="contenido">
-        {% block content %}
-        {% endblock %}
+        {% block content %}{% endblock %}
     </div>
 
 </body>
